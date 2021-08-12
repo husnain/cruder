@@ -18,26 +18,8 @@ class Database implements DbInterface
      * Constructor
      */
     public function __construct()
-    {
-        (new DotEnv(__DIR__ . '/.env'))->load();
-        $this->host = getenv('MySQL_HOST');
-        $this->db = getenv('MySQL_DBNAME');
-        $this->user = getenv('MySQL_USERNAME');
-        $this->password = getenv('MySQL_PASSWORD');
-        $this->port = getenv('MySQL_PORT');
-    }
+    {}
 
-    public function getConnection()
-    {
-        $mysqli = mysqli_connect('localhost', 'root','','employees');
-        // Check connection
-        if (!$mysqli) {
-            return "Failed to connect to MySQL: " . mysqLi_connect_error();
-            exit();
-        }
-
-        return $mysqli;
-    }
 
     /**
      * @return mixed
