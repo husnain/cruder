@@ -1,6 +1,5 @@
 {
     "name": "sharpedge/cruder",
-    "version": "1.0.0.1",
     "description": "php database connection and crud application made easy",
     "type": "library",
     "license": "MIT",
