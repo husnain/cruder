@@ -14,9 +14,18 @@ class SharpCrud extends Database
     public $limit;
     public $offset;
 
-    public function __construct()
+    public $host;
+    public $username;
+    public $password;
+    public $db;
+
+    public function __construct($host, $username, $password, $db)
     {
-        $this->mysqli = mysqli_connect('localhost', 'root','','employees');
+        $this->host = $host;
+        $this->username = $username;
+        $this->password = $password;
+        $this->db = $db;
+        $this->mysqli = mysqli_connect($this->host, $this->username,$this->password,$this->db);
         // Check connection
         if (!$this->mysqli) {
             return "Failed to connect to MySQL: " . mysqli_connect_error();

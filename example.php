@@ -9,4 +9,4 @@ $cruder = Cruder::getInstance('localhost', 'root', '', 'employees');
 
 $cruder->table('employees');
 $result = $cruder->getAll();
-
+//print_r($result);
