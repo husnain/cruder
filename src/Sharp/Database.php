@@ -67,7 +67,7 @@ class Database implements DbInterface
     public function getAllByTableWhere($mysqli, $table, $where)
     {
         $sql = "SELECT * FROM $table WHERE $where";
-        $result = $this->getConnection()->query($sql);
+        $result = $this->mysqli->query($sql);
         return $result;
     }
 
@@ -86,7 +86,7 @@ class Database implements DbInterface
     {
         $sql = "SHOW COLUMNS FROM $table";
         $columns = array();
-        $result = $this->getConnection()->query($sql)->fetch_all(MYSQLI_ASSOC);
+        $result = $this->mysqli->query($sql)->fetch_all(MYSQLI_ASSOC);
         foreach($result as $column){
             array_push($columns, $column['Field']);
         }
