@@ -3,6 +3,7 @@
     "description": "php database connection and crud application made easy",
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Husnain Ahmed",
