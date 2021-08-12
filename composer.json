@@ -1,7 +1,9 @@
 {
     "name": "sharpedge/cruder",
+    "version": "1.0.0.1",
     "description": "php database connection and crud application made easy",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Husnain Ahmed",
@@ -18,6 +20,7 @@
     "require-dev": {
         "phpunit/phpunit": "^6"
     },
+
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
