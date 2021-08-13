@@ -11,6 +11,8 @@ class SharpCrud extends Database
     public $title;
     public $select;
 
+    public $where;
+
     public $limit;
     public $offset;
 
@@ -78,6 +80,12 @@ class SharpCrud extends Database
         return $this;
     }
 
+    public function where(array $where)
+    {
+        $this->where = $where;
+        return $this;
+    }
+
     /**
      * 
      */
@@ -97,7 +105,12 @@ class SharpCrud extends Database
         if(!isset($this->offset)){
             $this->offset = NULL;
         }
-        return $this->getAllByTable($this->mysqli,$this->table, $this->select, $this->limit, $this->offset);
+
+        if(!isset($this->where)){
+            $this->where = NULL;
+        }
+
+        return $this->getAllByTable($this->mysqli,$this->table, $this->select, $this->limit, $this->offset, $this->where);
     }
 
     public function insert(array $data)

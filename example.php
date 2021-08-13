@@ -7,6 +7,8 @@ use Cruder\Sharp\SharpCrud as Cruder;
 $cruder = Cruder::getInstance('localhost', 'root', '', 'employees');
 
 
-$cruder->table('employees');
+$cruder->table('employees')->where(array('emp_no', '=', 500000));
+
 $result = $cruder->getAll();
-//print_r($result);
+echo "<pre>";
+print_r($result);

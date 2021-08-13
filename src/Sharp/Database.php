@@ -24,7 +24,7 @@ class Database implements DbInterface
     /**
      * @return mixed
      */
-    public function getAllByTable($connection, $table, $select, $limit, $offset)
+    public function getAllByTable($connection, $table, $select, $limit, $offset, $where)
     {
         if($select != '*'){
             $select = $this->arraySelectToString($select);
@@ -36,7 +36,15 @@ class Database implements DbInterface
         if($offset != NULL){
             $offset = 'OFFSET ' . $offset;
         }
-        $sql = "SELECT $select FROM $table $limit $offset";
+
+        if($where != NULL){
+            $where = implode($where);
+            $where_clause = 'WHERE '. $where;
+        }else{
+            $where_clause = "";
+        }
+
+        $sql = "SELECT $select FROM $table $where_clause $limit $offset";
         $result = $connection->query($sql)->fetch_all(MYSQLI_ASSOC);
         return $result;
     }

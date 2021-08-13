@@ -7,7 +7,7 @@ interface DbInterface {
     /**
      * Get all results of a given table
      */
-    public function getAllByTable($connection, $tablename, $select, $limit, $offset);
+    public function getAllByTable($connection, $tablename, $select, $limit, $offset, $where);
 
     /**
      * Get first result of a given table
