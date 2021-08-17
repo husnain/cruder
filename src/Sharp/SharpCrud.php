@@ -12,6 +12,7 @@ class SharpCrud extends Database
     public $select;
 
     public $where;
+    public  $updateCondition;
 
     public $limit;
     public $offset;
@@ -86,6 +87,12 @@ class SharpCrud extends Database
         return $this;
     }
 
+    public function updateCondition(array $updateCondition)
+    {
+        $this->updateCondition = $updateCondition;
+        return $this;
+    }
+
     /**
      * 
      */
@@ -116,6 +123,11 @@ class SharpCrud extends Database
     public function insert(array $data)
     {
         return $this->insertRaw($this->mysqli, $this->table, $data);
+    }
+
+    public function update()
+    {
+        return $this->updateQuery($this->mysqli, $this->table, $this->updateCondition, $this->where);
     }
 
     public function render()

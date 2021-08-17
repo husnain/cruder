@@ -101,11 +101,6 @@ class Database implements DbInterface
         return $columns;
     }
 
-    public function insertData($mysqli, $table, array $data)
-    {
-        $columns = $this->getColumnNames($table);
-        return $data;
-    }
 
     public function insertRaw($mysqli, $table, array $data)
     {
@@ -118,13 +113,25 @@ class Database implements DbInterface
             if ($mysqli->query($query) === TRUE) {
                 return $mysqli->insert_id;
             } else {
-                return "Error: " . $query . "<br>" . $this->getConnection()->error;
+                return "Error: " . $query . "<br>" . $mysqli->error;
             }
 
         }catch (\Exception $e){
             return $e->getMessage();
         }
 
+    }
+
+    public function insertData($mysqli, $table, array $data){
+        return NULL;
+    }
+
+    public function updateQuery($mysqli, $table, $update_condition, $where)
+    {
+//        $update = implode(",",$update_condition);
+        return $update_condition;
+        $query = "UPDATE $table SET $update_condition $where";
+        return $query;
     }
 
 }
