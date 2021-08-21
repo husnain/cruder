@@ -26,6 +26,7 @@ class Database implements DbInterface
      */
     public function getAllByTable($connection, $table, $select, $limit, $offset, $where)
     {
+        $result = "";
         if($select != '*'){
             $select = $this->arraySelectToString($select);
         }
@@ -37,13 +38,48 @@ class Database implements DbInterface
             $offset = 'OFFSET ' . $offset;
         }
 
+
         if($where != NULL){
-            $where = implode($where);
-            $where_clause = 'WHERE '. $where;
+            if(count($where) == count($where, COUNT_RECURSIVE)){
+                $where = implode($where);
+                $where_clause = 'WHERE '. $where;
+            }else{
+                $i = 0;
+                foreach ($where as $value){
+                    if($i > 0){
+                        $result .= ' AND '.implode($value);
+                    }else{
+                        $result .= implode($value);
+                    }
+                    $i++;
+                }
+                $where_clause = 'WHERE '.$result;
+            }
         }else{
             $where_clause = "";
         }
 
+        if($this->orWhere != NULL){
+            if(count($this->orWhere) == count($this->orWhere, COUNT_RECURSIVE)){
+                $this->orWhere = implode($this->orWhere);
+                $or_where_clause = 'WHERE '. $this->orWhere;
+            }else{
+                $i = 0;
+                foreach ($where as $value){
+//                    if($i > 0){
+                        $result .= ' OR '.implode($value);
+//                    }else{
+//                        $result .= implode($value);
+//                    }
+//                    $i++;
+                }
+                $or_where_clause = 'WHERE '.$result;
+            }
+        }
+
+        return $or_where_clause;
+
+        return $where_clause;
         $sql = "SELECT $select FROM $table $where_clause $limit $offset";
         $result = $connection->query($sql)->fetch_all(MYSQLI_ASSOC);
         return $result;
@@ -77,6 +113,11 @@ class Database implements DbInterface
         $sql = "SELECT * FROM $table WHERE $where";
         $result = $this->mysqli->query($sql);
         return $result;
+    }
+
+    public function rawSelect($query)
+    {
+        return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
     }
 
     /**

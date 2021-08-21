@@ -52,6 +52,15 @@ using this library, you can perform certain mysql functions like
   $result = $cruder->getAll();
 ```
 
+
+* Raw Select query*
+```php
+  use Cruder\Sharp\SharpCrud as Cruder;
+  $cruder = Cruder::getInstance('localhost', 'root', '', 'employees');
+  $query = "SELECT * FROM table_name";
+  $result = $cruder->raw($query);
+```
+
 *Select with WHERE*
 ```php
   use Cruder\Sharp\SharpCrud as Cruder;

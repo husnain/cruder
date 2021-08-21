@@ -6,9 +6,18 @@ use Cruder\Sharp\SharpCrud as Cruder;
  $insert_department = array('dept_no' => 'd010', 'dept_name' => 'Test' );
 $cruder = Cruder::getInstance('localhost', 'root', '', 'employees');
 
+$query = "SELECT * from employees";
 
-$cruder->table('employees')->where(array('emp_no', '=', 500000));
+$res = $cruder->raw($query);
+print_r($res);exit();
+$where = array(
+    array('emp_no', '=', 500000),
+    array('first_name', '=', 'husnain')
+);
 
+//$where = array('emp_no', '=', 500000);
+$cruder->table('employees')->where($where);
+$cruder->orWhere($where);
 $result = $cruder->getAll();
 
 echo "<pre>";
