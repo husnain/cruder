@@ -77,9 +77,9 @@ class Database implements DbInterface
             }
         }
 
-        return $or_where_clause;
+        // return $or_where_clause;
 
-        return $where_clause;
+        // return $where_clause;
         $sql = "SELECT $select FROM $table $where_clause $limit $offset";
         $result = $connection->query($sql)->fetch_all(MYSQLI_ASSOC);
         return $result;
