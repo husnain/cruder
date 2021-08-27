@@ -4,6 +4,7 @@ namespace Cruder\Sharp;
 
 use Cruder\DotEnv;
 use Cruder\Repository\DbInterface;
+use Throwable;
 
 class Database implements DbInterface
 {
@@ -26,63 +27,64 @@ class Database implements DbInterface
      */
     public function getAllByTable($connection, $table, $select, $limit, $offset, $where)
     {
-        $result = "";
-        if($select != '*'){
-            $select = $this->arraySelectToString($select);
-        }
-        if($limit != NULL){
-            $limit = 'LIMIT ' . $limit;
-        }
+        try{
 
-        if($offset != NULL){
-            $offset = 'OFFSET ' . $offset;
-        }
-
-
-        if($where != NULL){
-            if(count($where) == count($where, COUNT_RECURSIVE)){
-                $where = implode($where);
-                $where_clause = 'WHERE '. $where;
-            }else{
-                $i = 0;
-                foreach ($where as $value){
-                    if($i > 0){
-                        $result .= ' AND '.implode($value);
-                    }else{
-                        $result .= implode($value);
+            $result = "";
+            if($select != '*'){
+                $select = $this->arraySelectToString($select);
+            }
+            if($limit != NULL){
+                $limit = 'LIMIT ' . $limit;
+            }
+    
+            if($offset != NULL){
+                $offset = 'OFFSET ' . $offset;
+            }
+    
+    
+            if($where != NULL){
+                if(count($where) == count($where, COUNT_RECURSIVE)){
+                    $where = implode($where);
+                    $where_clause = 'WHERE '. $where;
+                }else{
+                    $i = 0;
+                    foreach ($where as $value){
+                        if($i > 0){
+                            $result .= ' AND '.implode($value);
+                        }else{
+                            $result .= implode($value);
+                        }
+                        $i++;
                     }
-                    $i++;
+                    $where_clause = 'WHERE '.$result;
                 }
-                $where_clause = 'WHERE '.$result;
-            }
-        }else{
-            $where_clause = "";
-        }
-
-        if($this->orWhere != NULL){
-            if(count($this->orWhere) == count($this->orWhere, COUNT_RECURSIVE)){
-                $this->orWhere = implode($this->orWhere);
-                $or_where_clause = 'WHERE '. $this->orWhere;
             }else{
-                $i = 0;
-                foreach ($where as $value){
-//                    if($i > 0){
-                        $result .= ' OR '.implode($value);
-//                    }else{
-//                        $result .= implode($value);
-//                    }
-//                    $i++;
-                }
-                $or_where_clause = 'WHERE '.$result;
+                $where_clause = "";
             }
+    
+            if($this->orWhere != NULL){
+                if(count($this->orWhere) == count($this->orWhere, COUNT_RECURSIVE)){
+                    $this->orWhere = implode($this->orWhere);
+                    $or_where_clause = 'WHERE '. $this->orWhere;
+                }else{
+                    $i = 0;
+                    foreach ($where as $value){
+                        $result .= ' OR '.implode($value);
+                    }
+                    $or_where_clause = 'WHERE '.$result;
+                }
+            }
+    
+            $sql = "SELECT $select FROM $table $where_clause $limit $offset";
+            $result = $connection->query($sql);
+            if($result->num_rows > 0){
+                return $result->fetch_all(MYSQLI_ASSOC);
+            }else{
+                return array();
+            }
+        }catch(Throwable $e){
+            return $e->getMessage();
         }
-
-        // return $or_where_clause;
-
-        // return $where_clause;
-        $sql = "SELECT $select FROM $table $where_clause $limit $offset";
-        $result = $connection->query($sql)->fetch_all(MYSQLI_ASSOC);
-        return $result;
     }
 
     /**
